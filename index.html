@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GemDesk CZK</title>
+  <style>
+    :root{--bg:#0d0f14;--panel:#171a21;--panel2:#202631;--text:#f5f1e8;--muted:#aaa49a;--gold:#d4af37;--gold2:#f3d77a;--green:#8ee6a8;--blue:#9fc1ff;--red:#ff7777;--border:rgba(255,255,255,.12);--shadow:0 24px 70px rgba(0,0,0,.36);--radius:20px}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at top left,rgba(212,175,55,.18),transparent 32%),linear-gradient(135deg,#0d0f14,#151923 55%,#090b0f);color:var(--text);padding:24px}
+    .app{max-width:1500px;margin:auto}header{display:flex;justify-content:space-between;gap:22px;margin-bottom:22px}h1{font-size:clamp(30px,4vw,52px);letter-spacing:-.05em;margin:0}p{color:var(--muted);line-height:1.55}.badge{border:1px solid rgba(212,175,55,.38);color:var(--gold2);background:rgba(212,175,55,.08);border-radius:999px;padding:9px 14px;height:max-content;white-space:nowrap}
+    .layout{display:grid;grid-template-columns:420px 1fr;gap:22px}.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;backdrop-filter:blur(14px)}
+    h2{margin:0 0 16px;font-size:19px}label{display:block;color:var(--muted);font-size:13px;margin:13px 0 7px}input,select,textarea{width:100%;border:1px solid var(--border);background:rgba(255,255,255,.055);color:var(--text);border-radius:13px;padding:12px 13px;outline:none;font-size:14px}select option{color:#111}textarea{min-height:78px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:rgba(212,175,55,.75);box-shadow:0 0 0 4px rgba(212,175,55,.10)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{border:0;border-radius:13px;padding:12px 14px;font-weight:800;cursor:pointer;color:#15110a;background:linear-gradient(135deg,var(--gold),var(--gold2))}button.secondary{color:var(--text);background:rgba(255,255,255,.08);border:1px solid var(--border)}button.ai{color:#07111f;background:linear-gradient(135deg,#9fc1ff,#d7e4ff)}button.danger{background:rgba(255,119,119,.13);color:#ffd6d6;border:1px solid rgba(255,119,119,.35)}
+    .result{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.metric{background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:16px;padding:14px}.metric small{display:block;color:var(--muted);margin-bottom:6px}.metric strong{font-size:22px}.metric.profit{background:linear-gradient(135deg,rgba(142,230,168,.20),rgba(212,175,55,.10));border-color:rgba(142,230,168,.45)}.metric.profit small{color:#bff7cd}.metric.profit strong{color:var(--green)}.wide{grid-column:1/-1}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{padding:10px 13px;border-radius:999px;border:1px solid var(--border);color:var(--muted);background:rgba(255,255,255,.04);cursor:pointer;font-size:13px;font-weight:700}.tab.active{color:#15110a;background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent}.panel{display:none}.panel.active{display:block}
+    .toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.toolbar input{max-width:360px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid var(--border);padding:12px 10px;text-align:left;vertical-align:middle;font-size:13px}th{color:var(--muted);background:rgba(255,255,255,.04)}tr:hover td{background:rgba(255,255,255,.035)}
+    .photo{width:58px;height:58px;object-fit:cover;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.06)}.preview{max-width:240px;border-radius:16px;border:1px solid var(--border);margin-top:12px;display:none}.empty{color:var(--muted);text-align:center;padding:34px;border:1px dashed var(--border);border-radius:18px;margin-top:14px}.pill{display:inline-flex;border-radius:999px;padding:5px 9px;background:rgba(212,175,55,.10);color:var(--gold2);border:1px solid rgba(212,175,55,.22);font-size:12px;margin-top:5px}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{padding:8px 10px;font-size:12px}.note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.5;border-left:3px solid rgba(212,175,55,.55);padding-left:12px}.risk{border-left-color:rgba(255,119,119,.70)}.aiBox{background:rgba(159,193,255,.08);border:1px solid rgba(159,193,255,.22);border-radius:16px;padding:14px;color:#dbe7ff;white-space:pre-wrap;line-height:1.5;font-size:13px;min-height:120px}.small{font-size:12px;color:var(--muted)}
+    @media(max-width:1080px){body{padding:14px}header,.layout{display:block}.badge{display:inline-block;margin-top:12px}.card{margin-bottom:18px}.row,.result{grid-template-columns:1fr}table{min-width:980px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>GemDesk CZK</h1>
+      <p>Evidence drahých kamenů, tabulková databázová cena, ideální nákup, wholesale ČR, retail ČR, profit a AI modul pro cenový komentář i foto screening.</p>
+    </div>
+    <div class="badge">Retail • Wholesale • AI Vision</div>
+  </header>
+
+  <div class="layout">
+    <section class="card">
+      <h2>Karta produktu</h2>
+      <input type="hidden" id="editId">
+
+      <label>Název / interní označení</label>
+      <input id="name" placeholder="např. Safír modrý ovál 1,25 ct">
+
+      <div class="row">
+        <div><label>Typ kamene</label><select id="gemType"></select></div>
+        <div><label>Počet karátů</label><input id="carats" type="number" min="0" step="0.01" placeholder="1.25"></div>
+      </div>
+
+      <div class="row">
+        <div><label>Kvalitativní třída</label><select id="quality"><option value="commercial">Commercial</option><option value="good" selected>Good</option><option value="fine">Fine</option><option value="premium">Premium</option><option value="exceptional">Exceptional</option></select></div>
+        <div><label>Barva / saturace</label><select id="colorGrade"><option value="weak">Slabá / světlá</option><option value="medium" selected>Střední</option><option value="strong">Silná</option><option value="vivid">Vivid / top color</option></select></div>
+      </div>
+
+      <div class="row">
+        <div><label>Čistota</label><select id="clarity"><option value="included">Viditelné inkluze</option><option value="slightly" selected>Lehké inkluze</option><option value="eyeClean">Eye-clean</option><option value="loupeClean">Loupe-clean / top</option></select></div>
+        <div><label>Brus / tvar</label><select id="cut"><option value="cabochon">Cabochon / horší brus</option><option value="standard" selected>Standardní fasetovaný</option><option value="fine">Kvalitní brus</option><option value="excellent">Výborný / prémiový brus</option></select></div>
+      </div>
+
+      <div class="row">
+        <div><label>Treatment</label><select id="treatment"><option value="unknown">Neznámé</option><option value="heated" selected>Běžné zahřívání</option><option value="minor">Minor treatment</option><option value="none">Bez úprav</option><option value="significant">Výrazné úpravy</option><option value="synthetic">Syntetický / lab-grown</option></select></div>
+        <div><label>Certifikace</label><select id="cert"><option value="none">Bez certifikace</option><option value="local">Lokální certifikát</option><option value="igi">IGI / HRD</option><option value="gia">GIA / Gübelin / SSEF</option></select></div>
+      </div>
+
+      <div class="row">
+        <div><label>Skutečná nákupní cena CZK</label><input id="purchasePrice" type="number" min="0" step="1"></div>
+        <div><label>Ruční cena za ct CZK</label><input id="manualPricePerCt" type="number" min="0" step="1" placeholder="přepíše databázi"></div>
+      </div>
+
+      <div class="row">
+        <div><label>Retail ČR koeficient % z databáze</label><input id="retailMargin" type="number" min="0" step="1" value="95"></div>
+        <div><label>Wholesale ČR koeficient % z databáze</label><input id="wholesaleMargin" type="number" min="0" step="1" value="60"></div>
+      </div>
+
+      <div class="row">
+        <div><label>Min. Retail ČR CZK</label><input id="minRetail" type="number" min="0" step="1"></div>
+        <div><label>Min. Wholesale ČR CZK</label><input id="minWholesale" type="number" min="0" step="1"></div>
+      </div>
+
+      <label>Fotografie kamene</label>
+      <input id="photo" type="file" accept="image/*">
+      <img id="photoPreview" class="preview">
+
+      <label>Poznámka</label>
+      <textarea id="note" placeholder="původ, rozměry, dodavatel, číslo certifikátu, sklad..."></textarea>
+
+      <div class="result">
+        <div class="metric"><small>Databázová cena dle tabulek</small><strong id="marketResult">0 Kč</strong></div>
+        <div class="metric"><small>Nákup Ideal</small><strong id="idealPurchaseResult">0 Kč</strong></div>
+        <div class="metric"><small>Wholesale ČR</small><strong id="wholesaleResult">0 Kč</strong></div>
+        <div class="metric"><small>Retail ČR</small><strong id="retailResult">0 Kč</strong></div>
+        <div class="metric profit wide"><small>Profit = Retail ČR − Nákup Ideal</small><strong id="profitResult">0 Kč</strong></div>
+      </div>
+
+      <div class="buttons">
+        <button onclick="saveProduct()">Uložit kartu</button>
+        <button class="secondary" onclick="calculateAndRender()">Přepočítat</button>
+        <button class="secondary" onclick="resetForm()">Vyčistit</button>
+      </div>
+
+      <div class="note">Logika: databázová cena dle tabulek = retailová referenční cena; Nákup Ideal = 1/3 databázové ceny; Wholesale ČR a Retail ČR se počítají koeficientem z databázové ceny.</div>
+      <div class="note risk">AI ani kalkulátor nenahrazují gemologickou expertízu. Pravost, treatment, původ a syntetický/lab-grown původ nelze spolehlivě ověřit jen z fotografie.</div>
+    </section>
+
+    <section class="card">
+      <div class="tabs">
+        <div class="tab active" onclick="showTab(event,'evidence')">Evidence</div>
+        <div class="tab" onclick="showTab(event,'database')">Cenová databáze</div>
+        <div class="tab" onclick="showTab(event,'ai')">ChatGPT cena</div>
+        <div class="tab" onclick="showTab(event,'vision')">AI foto verifikace</div>
+      </div>
+
+      <div id="evidence" class="panel active">
+        <div class="toolbar"><h2>Produktové karty</h2><input id="search" placeholder="Hledat..." oninput="renderProducts()"><div class="buttons" style="margin:0"><button class="secondary" onclick="exportJson()">Export JSON</button><button class="danger" onclick="clearAll()">Smazat vše</button></div></div>
+        <div id="empty" class="empty">Zatím není uložen žádný kámen.</div>
+        <div class="table-wrap"><table id="productsTable" style="display:none"><thead><tr><th>Foto</th><th>Název</th><th>Typ</th><th>ct</th><th>Skutečný nákup</th><th>Nákup Ideal</th><th>Retail databáze</th><th>Retail ČR</th><th>Wholesale ČR</th><th>Profit</th><th>Akce</th></tr></thead><tbody id="productsBody"></tbody></table></div>
+      </div>
+
+      <div id="database" class="panel">
+        <h2>Interní cenová databáze CZK/ct</h2>
+        <p class="small">Výchozí benchmark je orientační. Ceny lze ručně upravit exportem/importem přes JSON v další verzi; nyní lze přepsat ruční cenu za ct na kartě produktu.</p>
+        <div class="table-wrap"><table><thead><tr><th>Kámen</th><th>Commercial</th><th>Good</th><th>Fine</th><th>Premium</th><th>Exceptional</th></tr></thead><tbody id="dbBody"></tbody></table></div>
+        <div class="buttons"><button class="secondary" onclick="exportDatabase()">Export databáze</button><button class="secondary" onclick="resetDatabase()">Obnovit výchozí</button></div>
+      </div>
+
+      <div id="ai" class="panel">
+        <h2>ChatGPT cenový komentář</h2>
+        <p class="small">AI běží přes Netlify Function. OpenAI API key se neukládá do prohlížeče; musí být nastaven v Netlify jako environment variable <b>OPENAI_API_KEY</b>.</p>
+        <div class="buttons"><button class="ai" onclick="askChatGPTPrice()">AI odhad k aktuální kartě</button></div>
+        <label>Výstup</label><div id="aiOutput" class="aiBox">Vyplňte kartu a spusťte AI cenový komentář.</div>
+      </div>
+
+      <div id="vision" class="panel">
+        <h2>AI foto verifikace kamene</h2>
+        <p class="small">Použije fotografii z aktuální karty. AI vrátí pravděpodobný typ kamene, barvu, tvar/brus, viditelné vady, red flags a doporučené testy.</p>
+        <div class="buttons"><button class="ai" onclick="askChatGPTVision()">Analyzovat fotografii</button><button class="secondary" onclick="applyVisionToForm()">Přenést návrhy do formuláře</button></div>
+        <label>AI foto analýza</label><div id="visionOutput" class="aiBox">Nahrajte fotografii vlevo a spusťte analýzu.</div>
+        <div class="note risk">Foto verifikace je pouze screening. U dražších kamenů požadujte GIA / Gübelin / SSEF / IGI / HRD nebo vlastní gemologické měření.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY="gemPricingProducts.v5", DB_KEY="gemPricingDatabase.v2";
+let currentPhoto="", lastVisionSuggestion=null;
+
+const defaultGemDB={
+  diamond:{label:"Diamant",commercial:22000,good:45000,fine:90000,premium:180000,exceptional:420000},
+  ruby:{label:"Rubín",commercial:9000,good:38000,fine:95000,premium:260000,exceptional:850000},
+  sapphire:{label:"Safír",commercial:6500,good:24000,fine:65000,premium:145000,exceptional:480000},
+  emerald:{label:"Smaragd",commercial:7000,good:32000,fine:85000,premium:210000,exceptional:650000},
+  alexandrite:{label:"Alexandrit",commercial:18000,good:85000,fine:220000,premium:650000,exceptional:1500000},
+  tanzanite:{label:"Tanzanit",commercial:2500,good:9000,fine:18000,premium:35000,exceptional:62000},
+  spinel:{label:"Spinel",commercial:2500,good:9000,fine:26000,premium:75000,exceptional:180000},
+  tourmaline:{label:"Turmalín",commercial:500,good:2500,fine:9000,premium:28000,exceptional:85000},
+  aquamarine:{label:"Akvamarín",commercial:450,good:2300,fine:7500,premium:22000,exceptional:60000},
+  opal:{label:"Opál",commercial:900,good:5000,fine:16000,premium:42000,exceptional:120000},
+  garnet:{label:"Granát",commercial:250,good:1200,fine:3800,premium:12000,exceptional:30000},
+  topaz:{label:"Topaz",commercial:180,good:900,fine:2400,premium:6500,exceptional:15000},
+  amethyst:{label:"Ametyst",commercial:120,good:650,fine:1600,premium:4500,exceptional:11000},
+  zirkon:{label:"Zirkon",commercial:450,good:2500,fine:9000,premium:24000,exceptional:70000},
+  olivine:{label:"Olivín / peridot",commercial:500,good:3200,fine:9500,premium:28000,exceptional:75000},
+  almandine:{label:"Almandin",commercial:250,good:1100,fine:3200,premium:9500,exceptional:26000},
+  citrine:{label:"Citrín",commercial:160,good:750,fine:2200,premium:6000,exceptional:16000},
+  morganite:{label:"Morganit",commercial:900,good:4500,fine:14000,premium:36000,exceptional:90000},
+  other:{label:"Jiný kámen",commercial:300,good:2000,fine:7000,premium:18000,exceptional:50000}
+};
+
+const sizeBands=[{max:.25,m:.55},{max:.5,m:.72},{max:1,m:1},{max:2,m:1.28},{max:3,m:1.55},{max:5,m:2.05},{max:10,m:3},{max:Infinity,m:4.2}];
+const colorM={weak:.62,medium:1,strong:1.32,vivid:1.85};
+const clarityM={included:.68,slightly:1,eyeClean:1.28,loupeClean:1.55};
+const cutM={cabochon:.70,standard:1,fine:1.14,excellent:1.28};
+const treatmentM={unknown:.78,heated:1,minor:1.08,none:1.35,significant:.48,synthetic:.18};
+const certM={none:.90,local:1,igi:1.10,gia:1.24};
+
+const el=id=>document.getElementById(id);
+const val=id=>String(el(id)?.value ?? "");
+const num=id=>Number(val(id).replace(",", ".")) || 0;
+const money=v=>new Intl.NumberFormat("cs-CZ",{style:"currency",currency:"CZK",maximumFractionDigits:0}).format(Number(v)||0);
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+
+function getDB(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(DB_KEY)||"{}");
+    const merged={...defaultGemDB};
+    for(const [k,row] of Object.entries(saved||{})){
+      if(row && typeof row==="object") merged[k]={...(defaultGemDB[k]||{}),...row,label:row.label || defaultGemDB[k]?.label || k};
+    }
+    return merged;
+  }catch(e){return defaultGemDB}
+}
+function setDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
+function getProducts(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){return[]}}
+function setProducts(p){localStorage.setItem(STORAGE_KEY,JSON.stringify(p))}
+function sizeFactor(ct){return sizeBands.find(x=>ct<=x.max).m}
+
+function populateGemTypes(){
+  const s=el("gemType"), db=getDB();
+  if(!s) return;
+  const previous=s.value || "diamond";
+  s.innerHTML=Object.entries(db).filter(([,r])=>r&&r.label).map(([k,r])=>`<option value="${k}">${esc(r.label)}</option>`).join("");
+  s.value=db[previous] ? previous : (db.diamond ? "diamond" : Object.keys(db)[0]);
+}
+
+function calculatePrices(){
+  const db=getDB(), gem=val("gemType") || "other", q=val("quality") || "good", ct=num("carats");
+  const base=num("manualPricePerCt") || db[gem]?.[q] || db.other.good;
+  const databaseRetail=base*ct*sizeFactor(ct)*(colorM[val("colorGrade")]||1)*(clarityM[val("clarity")]||1)*(cutM[val("cut")]||1)*(treatmentM[val("treatment")]||1)*(certM[val("cert")]||1);
+  const ideal=Math.round(databaseRetail/3);
+  const wholesale=Math.max(Math.round(databaseRetail*(num("wholesaleMargin")/100)), num("minWholesale") || 0);
+  const retail=Math.max(Math.round(databaseRetail*(num("retailMargin")/100)), Math.round(wholesale*1.12), num("minRetail") || 0);
+  return {basePerCt:Math.round(base), marketBase:Math.round(databaseRetail), idealPurchase:ideal, wholesale, retail, profit:Math.round(retail-ideal)};
+}
+
+function calculateAndRender(){
+  const p=calculatePrices();
+  el("marketResult").textContent=money(p.marketBase);
+  el("idealPurchaseResult").textContent=money(p.idealPurchase);
+  el("wholesaleResult").textContent=money(p.wholesale);
+  el("retailResult").textContent=money(p.retail);
+  el("profitResult").textContent=money(p.profit);
+  return p;
+}
+
+function currentPayload(){
+  const db=getDB(), gem=val("gemType") || "other", p=calculatePrices();
+  return {
+    name: val("name").trim(),
+    gemType: gem,
+    gemLabel: db[gem]?.label || gem,
+    carats: num("carats"),
+    quality: val("quality"),
+    colorGrade: val("colorGrade"),
+    clarity: val("clarity"),
+    cut: val("cut"),
+    treatment: val("treatment"),
+    cert: val("cert"),
+    purchasePriceCZK: num("purchasePrice"),
+    manualPricePerCtCZK: num("manualPricePerCt"),
+    baseBenchmarkPerCtCZK: p.basePerCt,
+    databaseRetailValueCZK: p.marketBase,
+    idealPurchaseCZK: p.idealPurchase,
+    suggestedRetailCZK_CZ: p.retail,
+    suggestedWholesaleCZK_CZ: p.wholesale,
+    profitCZK: p.profit,
+    note: val("note").trim()
+  };
+}
+
+document.addEventListener("input",e=>{
+  if(["INPUT","SELECT","TEXTAREA"].includes(e.target.tagName) && !["search"].includes(e.target.id)) calculateAndRender();
+});
+
+el("photo").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{currentPhoto=r.result; el("photoPreview").src=currentPhoto; el("photoPreview").style.display="block"};
+  r.readAsDataURL(f);
+});
+
+function saveProduct(){
+  try{
+    const id=val("editId") || crypto.randomUUID();
+    const payload=currentPayload();
+    const product={id,...payload,name:payload.name || "Neoznačený kámen",photo:currentPhoto,updatedAt:new Date().toISOString()};
+    const arr=getProducts();
+    const idx=arr.findIndex(x=>x.id===id);
+    if(idx>=0) arr[idx]=product; else arr.unshift(product);
+    setProducts(arr);
+    resetForm();
+    renderProducts();
+  }catch(e){alert("Kartu se nepodařilo uložit: "+e.message)}
+}
+
+function renderProducts(){
+  const q=val("search").toLowerCase();
+  const arr=getProducts().filter(p=>[p.name,p.gemLabel,p.note,p.quality,p.cert,p.treatment].join(" ").toLowerCase().includes(q));
+  if(!arr.length){el("productsTable").style.display="none"; el("empty").style.display="block"; return}
+  el("productsTable").style.display="table"; el("empty").style.display="none";
+  el("productsBody").innerHTML=arr.map(p=>`<tr>
+    <td>${p.photo?`<img class="photo" src="${p.photo}" alt="">`:`<div class="photo"></div>`}</td>
+    <td><b>${esc(p.name)}</b><br><span class="pill">${esc(p.quality)} / ${esc(p.cert)}</span></td>
+    <td>${esc(p.gemLabel||p.gemType)}</td><td>${p.carats||0}</td>
+    <td>${money(p.purchasePriceCZK)}</td><td><b>${money(p.idealPurchaseCZK)}</b></td><td>${money(p.databaseRetailValueCZK)}</td>
+    <td><b>${money(p.suggestedRetailCZK_CZ)}</b></td><td><b>${money(p.suggestedWholesaleCZK_CZ)}</b></td>
+    <td><span class="pill" style="background:rgba(142,230,168,.16);border-color:rgba(142,230,168,.42);color:#8ee6a8;font-weight:800">${money(p.profitCZK)}</span></td>
+    <td><div class="actions"><button class="secondary" onclick="editProduct('${p.id}')">Upravit</button><button class="danger" onclick="deleteProduct('${p.id}')">Smazat</button></div></td>
+  </tr>`).join("");
+}
+
+function editProduct(id){
+  const p=getProducts().find(x=>x.id===id); if(!p) return;
+  el("editId").value=p.id; el("name").value=p.name || ""; el("gemType").value=p.gemType || "other"; el("carats").value=p.carats || "";
+  el("quality").value=p.quality || "good"; el("colorGrade").value=p.colorGrade || "medium"; el("clarity").value=p.clarity || "slightly";
+  el("cut").value=p.cut || "standard"; el("treatment").value=p.treatment || "heated"; el("cert").value=p.cert || "none";
+  el("purchasePrice").value=p.purchasePriceCZK || ""; el("manualPricePerCt").value=p.manualPricePerCtCZK || ""; el("note").value=p.note || "";
+  currentPhoto=p.photo || ""; if(currentPhoto){el("photoPreview").src=currentPhoto; el("photoPreview").style.display="block"}
+  calculateAndRender(); scrollTo({top:0,behavior:"smooth"});
+}
+function deleteProduct(id){if(confirm("Smazat kartu?")){setProducts(getProducts().filter(p=>p.id!==id));renderProducts()}}
+function clearAll(){if(confirm("Smazat celou evidenci?")){localStorage.removeItem(STORAGE_KEY);renderProducts()}}
+function resetForm(){
+  ["editId","name","carats","purchasePrice","manualPricePerCt","minRetail","minWholesale","note"].forEach(id=>el(id).value="");
+  el("gemType").value="diamond"; el("quality").value="good"; el("colorGrade").value="medium"; el("clarity").value="slightly"; el("cut").value="standard"; el("treatment").value="heated"; el("cert").value="none";
+  el("retailMargin").value=95; el("wholesaleMargin").value=60; el("photo").value=""; currentPhoto=""; el("photoPreview").style.display="none"; calculateAndRender();
+}
+
+function renderDB(){
+  const db=getDB();
+  el("dbBody").innerHTML=Object.entries(db).map(([k,r])=>`<tr><td><b>${esc(r.label)}</b><br><span class="small">${esc(k)}</span></td><td>${money(r.commercial)}</td><td>${money(r.good)}</td><td>${money(r.fine)}</td><td>${money(r.premium)}</td><td>${money(r.exceptional)}</td></tr>`).join("");
+}
+function resetDatabase(){if(confirm("Obnovit výchozí cenovou databázi?")){localStorage.removeItem(DB_KEY);populateGemTypes();renderDB();calculateAndRender()}}
+function exportJson(){downloadFile("drahokamy-evidence.json",JSON.stringify(getProducts(),null,2))}
+function exportDatabase(){downloadFile("drahokamy-cenova-databaze.json",JSON.stringify(getDB(),null,2))}
+function downloadFile(name,content){const b=new Blob([content],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+
+function showTab(ev,id){document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));ev.target.classList.add("active");el(id).classList.add("active")}
+
+async function callAI(mode,payload,image){
+  const res=await fetch("/.netlify/functions/openai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode,payload,image})});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error || "AI request failed");
+  return data.text || "Bez odpovědi.";
+}
+
+async function askChatGPTPrice(){
+  el("aiOutput").textContent="Počítám AI cenový komentář...";
+  try{el("aiOutput").textContent=await callAI("price", currentPayload(), null)}
+  catch(e){el("aiOutput").textContent="Chyba: "+e.message}
+}
+
+async function askChatGPTVision(){
+  el("visionOutput").textContent="Analyzuji fotografii...";
+  if(!currentPhoto){el("visionOutput").textContent="Nejdříve nahrajte fotografii kamene vlevo."; return}
+  try{
+    const txt=await callAI("vision", currentPayload(), currentPhoto);
+    el("visionOutput").textContent=txt;
+    const m=txt.match(/\{[\s\S]*\}/);
+    lastVisionSuggestion=m ? JSON.parse(m[0]) : null;
+  }catch(e){el("visionOutput").textContent="Chyba: "+e.message}
+}
+
+function applyVisionToForm(){
+  if(!lastVisionSuggestion){alert("Nejdříve spusťte AI foto analýzu."); return}
+  ["gemType","colorGrade","clarity","cut"].forEach(k=>{if(lastVisionSuggestion[k] && el(k)) el(k).value=lastVisionSuggestion[k]});
+  calculateAndRender();
+}
+
+try{populateGemTypes();renderDB();calculateAndRender();renderProducts()}catch(e){console.error(e);alert("Chyba inicializace: "+e.message)}
+</script>
+</body>
+</html>
