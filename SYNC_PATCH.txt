@@ -1,0 +1,21 @@
+Do index.html doplněna synchronizace přes /.netlify/functions/storage:
+
+1. async function syncFromServer()
+- GET /.netlify/functions/storage
+- načte products
+- uloží do localStorage
+- renderProducts()
+
+2. async function syncToServer()
+- POST /.netlify/functions/storage
+- odešle {products:getProducts()}
+
+3. saveProduct()
+- po setProducts(arr) zavolat await syncToServer()
+
+4. deleteProduct() a clearAll()
+- po změně dat zavolat syncToServer()
+
+5. inicializace:
+- místo renderProducts() použít:
+  syncFromServer().catch(()=>renderProducts())
